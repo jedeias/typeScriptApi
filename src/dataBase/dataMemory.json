@@ -1,0 +1,27 @@
+{
+    "users": [
+      {
+        "pkUser": 1,
+        "name": "test1",
+        "age": 22,
+        "email": "test1@test.com",
+        "password": "test1",
+        "typeUser": {
+          "pkTypeUser": 1,
+          "userType": "admin"
+        }
+      },
+      
+      {
+        "pkUser": 2,
+        "name": "test2",
+        "age": 25,
+        "email": "test2@test.com",
+        "password": "test2",
+        "typeUser": {
+          "pkTypeUser": 2,
+          "userType": "read"
+        }
+      }
+    ]
+}
