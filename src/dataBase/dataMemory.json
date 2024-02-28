@@ -7,7 +7,7 @@
         "email": "test1@test.com",
         "password": "test1",
         "typeUser": {
-          "pkTypeUser": 1,
+          "pkType": 1,
           "userType": "admin"
         }
       },
@@ -19,7 +19,7 @@
         "email": "test2@test.com",
         "password": "test2",
         "typeUser": {
-          "pkTypeUser": 2,
+          "pkType": 2,
           "userType": "read"
         }
       }
