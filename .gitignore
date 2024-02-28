@@ -2,6 +2,4 @@
 
 *.js
 
-IUser.ts
-User.ts
-UserRoutes.ts
+typeTest.ts
