@@ -1,57 +1,28 @@
-import { User } from '../models/user/User';
-import fs from 'fs';
-
-interface UserType {
-  pkType: number;
-  userType: string;
-}
-
-interface UserData {
-  pkUser: number;
-  name: string;
-  age: number;
-  email: string;
-  password: string;
-  typeUser: UserType;
-}
+import { User } from "../models/user/User";
+import { UserRepository } from "../database/UserRepository";
 
 export class Auth {
 
-  static login(email: string, password: string): User | boolean {
+  static async login(email: string, password: string): Promise<User | boolean> {
     try {
-      const data: UserData[] = [{
-        "pkUser": 1,
-        "name": "test1",
-        "age": 22,
-        "email": "test1@test.com",
-        "password": "test1",
-        "typeUser": {
-          "pkType": 1,
-          "userType": "admin"
-        }
-      }];
+      const repository = new UserRepository();
+      const users = await repository.getAllUsers();
 
-      let authenticatedUser: User | boolean = false;
-
-      data.forEach((userData: UserData) => {
+      for (const userData of users) {
         if (userData.email === email && userData.password === password) {
-          authenticatedUser = new User(
-            userData.pkUser,
+          return new User(
             userData.age,
             userData.name,
             userData.email,
             userData.password,
-            userData.typeUser.userType,
-            userData.typeUser.pkType
+            userData.userTypeId,
           );
         }
-      });
-      return authenticatedUser;
-      
+      }
+      return false;
     } catch (error) {
-      console.error('has a error in the sistem: ', error);
+      console.error('Houve um erro no sistema:', error);
       return false;
     }
   }
 }
-

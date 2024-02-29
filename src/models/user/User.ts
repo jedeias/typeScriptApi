@@ -2,37 +2,34 @@ import {IUser} from './IUser';
 
 export class User implements IUser {
 
-    private pk: number;
+    private pk?: number;
     private age: number;
     private name: string;
     private email: string;
     private password: string;
-    private type: string;
+    private type?: string;
     private idType: number;
+    
 
     constructor(    
-        pk: number,
         age: number,
         name: string,
         email: string,
         password: string,
-        type: string,
         idType: number,
 
 
     ){
-        this.pk = pk;
         this.age = age;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.type = type;
         this.idType = idType;
     }
 
     //getters methods
 
-    getPk(): number {
+    getPk(): number | undefined {
         return this.pk;
     }
 
@@ -44,7 +41,7 @@ export class User implements IUser {
         return this.name;
     }
 
-    getType(): string {
+    getType(): string | undefined {
         return this.type;
     }
 

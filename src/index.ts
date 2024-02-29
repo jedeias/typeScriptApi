@@ -7,31 +7,22 @@ const port: number = 3000;
 
 app.use(express.json());
 
-app.post ("/", (req: Request, res: Response) => {
-    
+app.post("/", async (req: Request, res: Response) => {
     const { email, password } = req.body;
-    
-    const authenticatedUser: User | boolean = Auth.login(email, password);
-    
 
-    if(email == null || password == null){
-        res.status(401).json({ message: 'email or password not fund' });
-    }
-    // res.status(401).json({ message: `${email} and ${password}` });
-    
-
-    
-    if(authenticatedUser instanceof User) {
-        res.status(200).json({ message: 'Usuário autenticado', user: authenticatedUser });
+    if (!email || !password) {
+        return res.status(401).json({ message: 'Email or password not found' });
     }
 
-    if(authenticatedUser == false) {
-        res.status(401).json({ message: 'Erro de autenticação ou usuário não encontrado' });
+    const authenticatedUser: User | boolean = await Auth.login(email, password);
+
+    if (authenticatedUser instanceof User) {
+        return res.status(200).json({ message: 'User authenticated', user: authenticatedUser });
+    } else {
+        return res.status(401).json({ message: 'Authentication error or user not found' });
     }
-    
 });
 
-
 app.listen(port, () => {
-    console.log(`listening on port ${port}`);
+    console.log(`Listening on port ${port}`);
 });
