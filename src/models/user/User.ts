@@ -7,8 +7,7 @@ export class User implements IUser {
     private name: string;
     private email: string;
     private password: string;
-    private type?: string;
-    private idType: number;
+    private type: boolean;
     
 
     constructor(    
@@ -16,7 +15,7 @@ export class User implements IUser {
         name: string,
         email: string,
         password: string,
-        idType: number,
+        idType: boolean,
 
 
     ){
@@ -24,7 +23,7 @@ export class User implements IUser {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.idType = idType;
+        this.type = idType;
     }
 
     //getters methods
@@ -41,16 +40,12 @@ export class User implements IUser {
         return this.name;
     }
 
-    getType(): string | undefined {
-        return this.type;
-    }
-
     getEmail(): string {
         return this.email;
     }
 
-    getIdType(): number {
-        return this.idType;
+    getType(): boolean {
+        return this.type;
     }
 
     getPassword(): string {
@@ -71,16 +66,12 @@ export class User implements IUser {
         this.name = name;
     }
     
-    setType(type: string): void {
+    setType(type: boolean): void {
         this.type = type;
     }
     
     setEmail(email: string): void {
         this.email = email;
-    }
-    
-    setIdType(idType: number): void {
-        this.idType = idType;
     }
     
     setPassword(password: string): void {
