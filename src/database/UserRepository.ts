@@ -18,8 +18,8 @@ export class UserRepository{
                     age: user.getAge(),
                     email: user.getEmail(),
                     name: user.getName(),
-                    userTypeId: user.getIdType(),
                     password: user.getPassword(),
+                    isAdmin: user.getType()
                 }
             });
             console.log('Novo usuário criado:', newUser);

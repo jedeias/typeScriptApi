@@ -3,13 +3,13 @@ export interface IUser{
     getAge(): number;
     getName(): string;
     getEmail(): string;
-    getIdType(): number;
+    getType(): boolean;
     getPassword(): string;
 
     setPk(pk: number): void;
     setAge(age: number): void;
     setName(name: string): void;
     setEmail(email: string): void;
-    setIdType(idType: number): void;
+    setType(type: boolean): void;
     setPassword(password: string): void;
 }

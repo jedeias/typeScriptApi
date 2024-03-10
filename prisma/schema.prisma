@@ -13,18 +13,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model UserType {
-  pkUserType Int    @id @default(autoincrement())
-  type       String
-  User       User[]
-}
-
 model User {
   id         Int      @id @default(autoincrement())
   age        Int
   name       String
   password   String
   email      String   @unique
-  userType   UserType @relation(fields: [userTypeId], references: [pkUserType])
-  userTypeId Int
+  isAdmin   Boolean
+}
+
+model Token {
+  id         Int      @id @default(autoincrement())
+  value      String   @unique
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime?
 }
