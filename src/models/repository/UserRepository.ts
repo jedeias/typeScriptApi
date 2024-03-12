@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import {IUser} from "../models/user/IUser";
+import {IUser} from "../user/IUser";
 
 export class UserRepository{
 
@@ -35,6 +35,45 @@ export class UserRepository{
             const allUser = await this.prisma.user.findMany();
             return allUser;
 
+        }catch(error){
+            console.log("massage: error: ", error);
+            return [];
+        }finally{
+            await this.prisma.$disconnect();
+        }
+    }
+
+    async updateUser(user: IUser){
+        try{
+            const updateUser = await this.prisma.user.update({
+                data:{
+                    age: user.getAge(),
+                    email: user.getEmail(),
+                    name: user.getName(),
+                    password: user.getPassword(),
+                    isAdmin: user.getType(),
+                },
+                where:{
+                    id: user.getPk()
+                }
+                
+            });
+        }catch(error){
+            console.log("massage: error: ", error);
+            return [];
+        }finally{
+            await this.prisma.$disconnect();
+        }
+    }
+
+    async updateDelete(id: number){
+        try{
+            const deleteUser = await this.prisma.user.delete({
+                where:{
+                    id: id,
+                }
+                
+            });
         }catch(error){
             console.log("massage: error: ", error);
             return [];

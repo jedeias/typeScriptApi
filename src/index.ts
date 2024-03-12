@@ -1,7 +1,7 @@
 import express, {Request, Response} from 'express';
 import { Auth} from './controllers/Auth';
 import { User } from './models/user/User';
-import { UserRepository } from './database/UserRepository';
+import { UserRepository } from './models/repository/UserRepository';
 
 const app = express();
 const port: number = 3000;
@@ -22,7 +22,11 @@ app.post("/login", async (req: Request, res: Response) => {
 
         if (token) {
 
-            return res.status(200).json({ message: 'User authenticated', user: authenticatedUser, token: token});
+            const router:any = express.Router();
+            console.log('var router >_:',router)
+            
+            return res.status(200).json({ message: 'User authenticated', user: authenticatedUser, token: token });
+
         }
         return res.status(500).json({ message: 'token not fund'});
     } else {
