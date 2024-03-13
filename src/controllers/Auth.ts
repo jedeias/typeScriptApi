@@ -1,5 +1,5 @@
 import { User } from "../models/user/User";
-import { UserRepository } from "../database/UserRepository";
+import { UserRepository } from "../models/repository/UserRepository";
 import { PrismaClient } from "@prisma/client";
 
 export class Auth {
@@ -7,30 +7,32 @@ export class Auth {
   static async login(email: string, password: string): Promise<User | boolean> {
     try {
       const repository = new UserRepository();
-      const users = await repository.getAllUsers();
+      const user = await repository.getByEmail(email);
 
-      for (const userData of users) {
-        if (userData.email === email && userData.password === password) {
-          return new User(
-            userData.age,
-            userData.name,
-            userData.email,
-            userData.password,
-            userData.isAdmin,
-          );
+        if (typeof user === "string") {
+          return false;
         }
-      }
+
+        if (user.getEmail() === email && user.getPassword() === password) {
+          
+          return user;
+        }
+
       return false;
     } catch (error) {
+      
       console.error('Houve um erro no sistema:', error);
       return false;
+    
     }
   }
 
-  static async verifyToken(token: string): Promise<boolean> {
+  async verifyToken(token: string): Promise<boolean> {
+    
     const prisma = new PrismaClient();
   
     try {
+    
       // consulta
       const tokenData = await prisma.token.findUnique({
         where: {
@@ -50,12 +52,15 @@ export class Auth {
   
       return true; // não houve falha então foi um sucesso
     } catch (error) {
+    
       console.log('houve um erro na validação do token: ', error);
       return false;
+    
     }
   }
 
   static async generateToken(): Promise<string | null> {
+    
     const prisma = new PrismaClient();
     try {
         const tokenValue = this.generateRandomToken(36); // Supondo que a função generateRandomToken esteja definida em outro lugar do código
@@ -69,9 +74,10 @@ export class Auth {
 
         return token.value;
     } catch (error) {
-        console.error('Houve um erro ao gerar um token:', error);
-        return null;
-    } finally {
+    
+      console.error('Houve um erro ao gerar um token:', error);
+      return null;
+    }finally {
         await prisma.$disconnect();
     }
   }
@@ -88,6 +94,5 @@ export class Auth {
 
     return token;
   }
-
   
 }

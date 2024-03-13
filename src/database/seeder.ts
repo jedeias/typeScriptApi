@@ -1,5 +1,5 @@
 import {User} from "../models/user/User";
-import { UserRepository } from "./UserRepository";
+import { UserRepository } from "../models/repository/UserRepository";
 
 const newUser: User = new User(23, "john", "john@email.com", "123456", true);
 
