@@ -12,8 +12,10 @@ export class Routes {
     }
 
     public initRoutes() {
+        const PostHandler = new PostRequestHandler(); 
         this.app.get('/user', new GetRequestHandler().handle);
         this.app.post('/user', new PostRequestHandler().handle);
+        this.app.post('/login', new PostRequestHandler().login);
         this.app.put('/user', new PutRequestHandler().handle);
         this.app.delete('/user', new DeleteRequestHandler().handle);
     }
