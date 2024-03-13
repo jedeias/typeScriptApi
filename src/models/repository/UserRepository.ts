@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import {IUser} from "../user/IUser";
+import { User } from "../user/User";
 
 export class UserRepository{
 
@@ -11,8 +12,17 @@ export class UserRepository{
     
     }
 
-    async createUser(user: IUser) {
+    async createUser(user: IUser){
         try {
+
+            const hasThisEmail = await this.prisma.user.findUnique({
+                where: {email: user.getEmail()},
+            });
+            
+            if(hasThisEmail) {
+                return ({"erro": "Este e-mail já está em uso."});
+            }
+
             const newUser = await this.prisma.user.create({
                 data: {
                     age: user.getAge(),
@@ -22,9 +32,9 @@ export class UserRepository{
                     isAdmin: user.getType()
                 }
             });
-            console.log('Novo usuário criado:', newUser);
+            return ({'Novo usuário criado:': newUser});
         } catch (error) {
-            console.error('Erro ao criar usuário:', error);
+            return ({'Erro ao criar usuário:': error});
         } finally {
             await this.prisma.$disconnect();
         }
@@ -33,11 +43,10 @@ export class UserRepository{
     async getAllUsers() {
         try{
             const allUser = await this.prisma.user.findMany();
-            return allUser;
 
+            return allUser;
         }catch(error){
-            console.log("massage: error: ", error);
-            return [];
+            return ["massage: error:", error];
         }finally{
             await this.prisma.$disconnect();
         }
@@ -58,25 +67,68 @@ export class UserRepository{
                 }
                 
             });
+
+            return {"update": updateUser};
+
         }catch(error){
-            console.log("massage: error: ", error);
-            return [];
+            return {"massage: error:": error};
         }finally{
             await this.prisma.$disconnect();
         }
     }
 
-    async updateDelete(id: number){
+    async delete(id: number){
         try{
+
+            const revewl = await this.prisma.user.findFirst({
+                where: {
+                    id: id
+                }
+            })
+
+            if(!revewl){
+                return({"erro":"this id not exist"});
+            }
+
             const deleteUser = await this.prisma.user.delete({
                 where:{
                     id: id,
                 }
                 
             });
+
+            return {"success to remuve >_: ": deleteUser};
         }catch(error){
-            console.log("massage: error: ", error);
-            return [];
+            return ["massage: error:", error];
+        }finally{
+            await this.prisma.$disconnect();
+        }
+    }
+    
+    async getByEmail(email: string): Promise<User | string>{
+        try{
+            const user = await this.prisma.user.findUnique({
+                where:{
+                    email: email,
+                }
+            });
+    
+            if(!user){
+                return ('Usuário não encontrado');
+            }
+    
+            const newUser = new User(
+                user.age,
+                user.name,
+                user.email,
+                user.password,
+                user.isAdmin
+            );
+
+            return newUser;
+    
+        }catch(error){
+            return (`Houve um erro ao tentar encontrar o email: ${error}`);
         }finally{
             await this.prisma.$disconnect();
         }

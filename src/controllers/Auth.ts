@@ -7,23 +7,17 @@ export class Auth {
   static async login(email: string, password: string): Promise<User | boolean> {
     try {
       const repository = new UserRepository();
-      const users = await repository.getAllUsers();
+      const user = await repository.getByEmail(email);
 
-      for (const userData of users) {
-        
-        if (userData.email === email && userData.password === password) {
-          
-          return new User(
-            userData.age,
-            userData.name,
-            userData.email,
-            userData.password,
-            userData.isAdmin,
-          );
-
+        if (typeof user === "string") {
+          return false;
         }
 
-      }
+        if (user.getEmail() === email && user.getPassword() === password) {
+          
+          return user;
+        }
+
       return false;
     } catch (error) {
       
@@ -33,7 +27,7 @@ export class Auth {
     }
   }
 
-  static async verifyToken(token: string): Promise<boolean> {
+  async verifyToken(token: string): Promise<boolean> {
     
     const prisma = new PrismaClient();
   
